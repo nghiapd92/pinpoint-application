@@ -8,7 +8,7 @@ module.exports = class Application extends BaseApplication{
 		if(this.debug) this.enableDebugMode();
 
 		return this.dbBootstrap().then(() => {
-			this._registerModules();
+			this.registerModules();
 			this.express.listen(this.httpPort);
 		});
 	}
