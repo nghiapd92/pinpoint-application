@@ -16,9 +16,10 @@ module.exports =  class BaseApplication{
 			this.middlewares 	= new Array;
 
 			//HTTP Modules
-			this.modules 			= [];
+			this.modules 			= options.modules ? options.modules : [];
 			this.httpPort 		= options.httpPort ? options.httpPort : 8888;
 			this.httpAuth 		= new Object;
+			this.registeredModules = []
 			
 			//DEBUG
 			this.debug 				= true;
@@ -76,6 +77,7 @@ module.exports =  class BaseApplication{
 	 * 
 	 */
 	registerModules(){
+		console.log(this.modules);
 		for(let module of this.modules) this.registerModule(module);
 	}
 
