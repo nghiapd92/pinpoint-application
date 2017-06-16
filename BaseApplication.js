@@ -10,7 +10,7 @@ module.exports =  class BaseApplication{
 			this.socketio 		= new Object;
 
 			//Setup functions
-			this.dbBootstrap 			= Promise.resolve();
+			this.dbBootstrap 			= options.dbBootstrap;
 
 			//Middleware
 			this.middlewares 	= new Array;
