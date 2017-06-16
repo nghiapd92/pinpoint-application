@@ -1,3 +1,5 @@
+let mongoose = require("mongoose");
+
 module.exports =  class BaseApplication{
 	constructor(options){
 		try{
@@ -51,5 +53,9 @@ module.exports =  class BaseApplication{
 	 */
 	registerModules(){
 		for(let module of this.modules) this.registerModule(module.endpoint, module.path);
+	}
+
+	enableDebugMode(){
+		mongoose.set('debug', true); // turn on mongoose debug
 	}
 }

@@ -5,7 +5,7 @@ module.exports = class Application extends BaseApplication{
 	}
 
 	bootstrap(){
-		if(this.debug) this._enableDebugMode();
+		if(this.debug) this.enableDebugMode();
 
 		return this.dbBootstrap().then(() => {
 			this._registerModules();
