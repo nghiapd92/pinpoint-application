@@ -44,7 +44,7 @@ module.exports =  class BaseApplication{
 	 * @param {string} endpoint 
 	 * @param {Module} module 
 	 */
-	registerModule(endpoint, module){
+	registerModule(module){
 		//Khởi tạo Module Object
 		let authMiddleware = this.httpAuth;
 
@@ -56,16 +56,16 @@ module.exports =  class BaseApplication{
 			if(module.auth){
 				if(module.auth instanceof Array){
 					for(let moduleRoute of module.auth){
-						this.express.use(endpoint + moduleRoute, authMiddleware);
+						this.express.use(module.endpoint + moduleRoute, authMiddleware);
 					}
 				}
 
 				if(module.auth == "*")
-					this.express.use(endpoint, authMiddleware);
+					this.express.use(module.endpoint, authMiddleware);
 			}
 
 			//Đăng kí http server
-			this.express.use(endpoint, module.router);
+			this.express.use(module.endpoint, module.router);
 		} else {
 			throw new Error(`Module "${module.name}" đã được đăng kí`);
 		}
@@ -76,7 +76,7 @@ module.exports =  class BaseApplication{
 	 * 
 	 */
 	registerModules(){
-		for(let module of this.modules) this.registerModule(module.endpoint, module.module);
+		for(let module of this.modules) this.registerModule(module);
 	}
 
 	enableDebugMode(){
