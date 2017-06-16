@@ -9,7 +9,7 @@ module.exports = class Application extends BaseApplication{
 
 		return this.dbBootstrap().then(() => {
 			this._registerModules();
-			this.httpServer.listen(this.httpPort);
+			this.express.listen(this.httpPort);
 		});
 	}
 }

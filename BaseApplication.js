@@ -18,6 +18,7 @@ module.exports =  class BaseApplication{
 			//HTTP Modules
 			this.modules 			= [];
 			this.httpPort 		= options.httpPort ? options.httpPort : 8888;
+			this.httpAuth 		= new Object;
 			
 			//DEBUG
 			this.debug 				= true;
@@ -44,7 +45,30 @@ module.exports =  class BaseApplication{
 	 * @param {Module} module 
 	 */
 	registerModule(endpoint, module){
+		//Khởi tạo Module Object
+		let authMiddleware = this.httpAuth;
 
+		if(!this.registeredModules[module.name]){
+			//Đăng kí module vào trong application
+			this.registeredModules[module.name] = true;
+			
+			//Xử lý auth middleware
+			if(module.auth){
+				if(module.auth instanceof Array){
+					for(let moduleRoute of module.auth){
+						this.express.use(endpoint + moduleRoute, authMiddleware);
+					}
+				}
+
+				if(module.auth == "*")
+					this.express.use(endpoint, authMiddleware);
+			}
+
+			//Đăng kí http server
+			this.express.use(endpoint, module.router);
+		} else {
+			throw new Error(`Module "${module.name}" đã được đăng kí`);
+		}
 	}
 
 	/**
@@ -52,7 +76,7 @@ module.exports =  class BaseApplication{
 	 * 
 	 */
 	registerModules(){
-		for(let module of this.modules) this.registerModule(module.endpoint, module.path);
+		for(let module of this.modules) this.registerModule(module.endpoint, module.module);
 	}
 
 	enableDebugMode(){
